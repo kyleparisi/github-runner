@@ -14,7 +14,6 @@ Semi-automated setup of GitHub Action runners
 ## Getting Started
 
 ```shell
-# edit cloud-config.tmpl to fit your needs
 # create your cloud-config and config.json
 ./bin/render-templates
 # us-east-1 has poor spot prices so pick a different region...
