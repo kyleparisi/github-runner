@@ -1,4 +1,4 @@
-# AA Github Runner
+# Github Runner
 
 Semi-automated setup of GitHub Action runners
 
