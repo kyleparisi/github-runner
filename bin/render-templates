@@ -1,0 +1,6 @@
+#!/bin/bash
+
+envsubst < cloud-config.tmpl > cloud-config
+
+export USER_DATA=$(cat cloud-config | base64)
+envsubst < config.json.tmpl > config.json

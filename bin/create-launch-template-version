@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+result=$(jq -r ".LaunchTemplate" launch-template.json)
+
+# Check if the result is null (key doesn't exist) or not (key exists)
+if [ "$result" != "null" ]; then
+  launch_template_id=$(jq -r '.LaunchTemplate.LaunchTemplateId' launch-template.json)
+  source_version=$(jq -r '.LaunchTemplate.LatestVersionNumber' launch-template.json)
+
+  output=$(aws ec2 create-launch-template-version --launch-template-id $launch_template_id  --source-version $source_version \
+  --launch-template-data file://config.json)
+  echo $output | jq . | tee launch-template.json
+  exit 0
+fi
+
+launch_template_id=$(jq -r '.LaunchTemplateVersion.LaunchTemplateId' launch-template.json)
+source_version=$(jq -r '.LaunchTemplateVersion.VersionNumber' launch-template.json)
+
+output=$(aws ec2 create-launch-template-version --launch-template-id $launch_template_id  --source-version $source_version \
+--launch-template-data file://config.json)
+echo $output | jq . | tee launch-template.json

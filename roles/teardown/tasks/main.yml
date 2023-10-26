@@ -1,0 +1,13 @@
+---
+
+- name: uninstall runner
+  command: ./svc.sh uninstall github-runner
+  args:
+      chdir: /home/github-runner/actions-runner/
+
+- name: unconfigure runner
+  shell:
+    cmd: ./config.sh remove --token "{{ github_action_token }}"
+    chdir: /home/github-runner/actions-runner/
+  become: true
+  become_user: github-runner

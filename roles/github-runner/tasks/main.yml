@@ -1,0 +1,66 @@
+---
+
+- apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - acl
+
+- user:
+    name: github-runner
+    groups:
+      - docker
+    shell: /bin/bash
+
+- file:
+    state: directory
+    path: /home/github-runner/actions-runner
+    owner: github-runner
+    group: github-runner
+
+# to support nodejs/npm activities
+- file:
+    state: directory
+    path: /usr/lib/node_modules
+    mode: 0777
+
+# to support nodejs/npm activities
+- file:
+    state: directory
+    path: /usr/bin
+    mode: 0777
+
+- get_url:
+    url: https://github.com/actions/runner/releases/download/v2.308.0/actions-runner-linux-x64-2.308.0.tar.gz
+    dest: /home/github-runner/actions-runner/
+    checksum: sha256:9f994158d49c5af39f57a65bf1438cbae4968aec1e4fec132dd7992ad57c74fa
+    owner: github-runner
+    group: github-runner
+
+- unarchive:
+    src: /home/github-runner/actions-runner/actions-runner-linux-x64-2.308.0.tar.gz
+    dest: /home/github-runner/actions-runner/
+    remote_src: yes
+    owner: github-runner
+    group: github-runner
+
+- name: configure runner
+  shell:
+    cmd: ./config.sh --url "https://github.com/{{ github_namespace }}" --unattended --token "{{ github_action_token }}" --name "{{ runner_name }}" --labels "{{ runner_name }}"
+    chdir: /home/github-runner/actions-runner/
+  become: true
+  become_user: github-runner
+  # a host can only be configured one time, otherwise it needs to be torn down first
+  ignore_errors: true
+
+- name: install runner
+  command: ./svc.sh install github-runner
+  args:
+      chdir: /home/github-runner/actions-runner/
+  # a host can only be configured one time, otherwise it needs to be torn down first
+  ignore_errors: true
+
+- name: start runner
+  command: ./svc.sh start
+  args:
+      chdir: /home/github-runner/actions-runner/

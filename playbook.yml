@@ -1,0 +1,6 @@
+---
+
+- hosts: all,localhost
+  become: true
+  roles:
+    - { role: github-runner, tags: github-runner }

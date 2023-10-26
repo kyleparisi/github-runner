@@ -1,0 +1,22 @@
+#cloud-config
+repo_update: true
+
+packages:
+ - ansible
+
+runcmd:
+ - [ sh, -c, "git clone https://github.com/kyleparisi/freshserver.git /usr/local/src/freshserver" ]
+ - [ sh, -c, "mkdir /tmp/ansible_local" ]
+ - [ sh, -c, "mkdir /tmp/ansible_remote" ]
+ - [ sh, -c, "mkdir /etc/ansible" ]
+ - [ sh, -c, "cat /usr/local/src/freshserver/ansible.cfg > /etc/ansible/ansible.cfg" ]
+ - [ sh, -c, "ansible-playbook /usr/local/src/freshserver/playbook.yml --extra-vars 'github_user=${GITHUB_USER}'" ]
+
+ - [ sh, -c, "git clone https://github.com/kyleparisi/github-runner.git /usr/local/src/github-runner" ]
+ - [ sh, -c, "mkdir /tmp/ansible_local" ]
+ - [ sh, -c, "mkdir /tmp/ansible_remote" ]
+ - [ sh, -c, "mkdir /etc/ansible" ]
+ - [ sh, -c, "cat /usr/local/src/github-runner/ansible.cfg > /etc/ansible/ansible.cfg" ]
+ - [ sh, -c, "GITHUB_TOKEN=${GITHUB_TOKEN} GITHUB_NAMESPACE="${GITHUB_NAMESPACE}" /usr/local/src/github-runner/bin/deploy" ]
+
+output : { all : '| tee -a /var/log/cloud-init-output-github-runner.log' }

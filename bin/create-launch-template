@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+output=$(aws ec2 create-launch-template --launch-template-name github-runner --launch-template-data file://config.json)
+echo $output | jq . | tee launch-template.json

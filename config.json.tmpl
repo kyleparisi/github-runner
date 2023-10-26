@@ -1,0 +1,16 @@
+{
+	"BlockDeviceMappings": [{
+		"DeviceName": "/dev/sda1",
+		"Ebs": {
+			"Encrypted": true,
+			"DeleteOnTermination": true,
+			"VolumeSize": 30
+		}
+	}],
+	"ImageId": "ami-007855ac798b5175e",
+	"InstanceType": "t3.medium",
+	"UserData": "${USER_DATA}",
+	"InstanceMarketOptions": {
+		"MarketType": "spot"
+	}
+}

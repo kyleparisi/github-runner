@@ -1,0 +1,6 @@
+---
+
+- hosts: all,localhost
+  become: true
+  roles:
+    - { role: teardown, tags: teardown }
