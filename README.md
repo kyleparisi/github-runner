@@ -29,3 +29,13 @@ export AWS_DEFAULT_REGION=us-east-2
 ### Details
 
 
+After you deploy your template you should be able to start a spot instance fleet using this template in AWS 
+[here](https://us-east-2.console.aws.amazon.com/ec2/home?region=us-east-2#SpotInstancesLaunch:).  Now every time a spot
+instance is terminated, your fleet will spin up a new fresh instance as a runner.  It is worth noting that this could 
+happen in the middle of your github action.  That should be rare though.
+
+The instance deployed from this template is rather minimal.  Ideally you can do everything you need using standard
+docker [compose] patterns.
+
+If you need to debug your runner, the github user you specified will be able to ssh into the machine per their public
+keys on github ([example](https://github.com/kyleparisi.keys)).
