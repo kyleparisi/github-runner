@@ -4,4 +4,4 @@ set -e
 
 github_action_token=$(./bin/gettoken)
 
-ansible-playbook playbook.yml --extra-vars "github_action_token=$github_action_token" "$@"
+ansible-playbook playbook.yml --extra-vars "github_action_token=$github_action_token github_runner_namespace=$GITHUB_RUNNER_NAMESPACE" "$@"

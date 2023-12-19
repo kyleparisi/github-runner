@@ -5,7 +5,8 @@ Semi-automated setup of GitHub Action runners
 ## Prerequisites
 
 - A valid `$GITHUB_TOKEN` in your current terminal (needs: `admin:org` permissions)
-- A valid `$GITHUB_NAMESPACE` in your current terminal (i.e. `orgs/MyOrg` or `repos/kyleparisi/repo`)
+- A valid `$GITHUB_REGISTER_NAMESPACE` in your current terminal (i.e. `orgs/MyOrg` or `repos/kyleparisi/repo`)
+- A valid `$GITHUB_RUNNER_NAMESPACE` in your current terminal (i.e. `MyOrg` or `kyleparisi/repo`)
 - A valid `$GITHUB_USER` in your current terminal (i.e. `kyleparisi`)
 - An AWS account with proper IAM permissions to create an ec2 launch template
 - AWS CLI

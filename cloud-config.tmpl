@@ -9,6 +9,6 @@ runcmd:
  - [ sh, -c, "ansible-playbook /usr/local/src/freshserver/playbook.yml --extra-vars 'github_user=${GITHUB_USER}'" ]
 
  - [ sh, -c, "git clone https://github.com/kyleparisi/github-runner.git /usr/local/src/github-runner" ]
- - [ sh, -c, "GITHUB_TOKEN=${GITHUB_TOKEN} GITHUB_NAMESPACE="${GITHUB_NAMESPACE}" /usr/local/src/github-runner/bin/deploy" ]
+ - [ sh, -c, "cd /usr/local/src/github-runner && GITHUB_TOKEN=${GITHUB_TOKEN} GITHUB_REGISTER_NAMESPACE=${GITHUB_REGISTER_NAMESPACE} GITHUB_RUNNER_NAMESPACE=${GITHUB_RUNNER_NAMESPACE} ./bin/deploy" ]
 
 output : { all : '| tee -a /var/log/cloud-init-output-github-runner.log' }

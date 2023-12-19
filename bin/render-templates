@@ -3,4 +3,5 @@
 envsubst < cloud-config.tmpl > cloud-config
 
 export USER_DATA=$(cat cloud-config | base64)
-envsubst < config.json.tmpl > config.json
+envsubst < config-x64.json.tmpl > config-x64.json
+envsubst < config-arm.json.tmpl > config-arm.json

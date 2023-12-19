@@ -30,15 +30,27 @@
     path: /usr/bin
     mode: 0777
 
+- name: Set variable for ARM64 architecture
+  set_fact:
+    target_arch: "arm64"
+    checksum: "sha256:5d13b77e0aa5306b6c03e234ad1da4d9c6aa7831d26fd7e37a3656e77153611e"
+  when: "ansible_architecture == 'aarch64'"
+
+- name: Set variable for x86_64 architecture
+  set_fact:
+    target_arch: "x64"
+    checksum: "sha256:29fc8cf2dab4c195bb147384e7e2c94cfd4d4022c793b346a6175435265aa278"
+  when: "ansible_architecture == 'x86_64'"
+
 - get_url:
-    url: https://github.com/actions/runner/releases/download/v2.308.0/actions-runner-linux-x64-2.308.0.tar.gz
+    url: "https://github.com/actions/runner/releases/download/v2.311.0/actions-runner-linux-{{ target_arch }}-2.311.0.tar.gz"
     dest: /home/github-runner/actions-runner/
-    checksum: sha256:9f994158d49c5af39f57a65bf1438cbae4968aec1e4fec132dd7992ad57c74fa
+    checksum: "{{ checksum }}"
     owner: github-runner
     group: github-runner
 
 - unarchive:
-    src: /home/github-runner/actions-runner/actions-runner-linux-x64-2.308.0.tar.gz
+    src: "/home/github-runner/actions-runner/actions-runner-linux-{{ target_arch }}-2.311.0.tar.gz"
     dest: /home/github-runner/actions-runner/
     remote_src: yes
     owner: github-runner
@@ -46,7 +58,7 @@
 
 - name: configure runner
   shell:
-    cmd: ./config.sh --url "https://github.com/{{ github_namespace }}" --unattended --token "{{ github_action_token }}" --name "{{ runner_name }}" --labels "{{ runner_name }}"
+    cmd: ./config.sh --url "https://github.com/{{ github_runner_namespace }}" --unattended --token "{{ github_action_token }}" --labels "{{ runner_name }}"
     chdir: /home/github-runner/actions-runner/
   become: true
   become_user: github-runner

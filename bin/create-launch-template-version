@@ -2,22 +2,44 @@
 
 set -e
 
-result=$(jq -r ".LaunchTemplate" launch-template.json)
+echo "creating x64 template:"
+result=$(jq -r ".LaunchTemplate" launch-template-x64.json)
 
 # Check if the result is null (key doesn't exist) or not (key exists)
 if [ "$result" != "null" ]; then
-  launch_template_id=$(jq -r '.LaunchTemplate.LaunchTemplateId' launch-template.json)
-  source_version=$(jq -r '.LaunchTemplate.LatestVersionNumber' launch-template.json)
+  launch_template_id=$(jq -r '.LaunchTemplate.LaunchTemplateId' launch-template-x64.json)
+  source_version=$(jq -r '.LaunchTemplate.LatestVersionNumber' launch-template-x64.json)
 
   output=$(aws ec2 create-launch-template-version --launch-template-id $launch_template_id  --source-version $source_version \
-  --launch-template-data file://config.json)
-  echo $output | jq . | tee launch-template.json
+  --launch-template-data file://config-x64.json)
+  echo $output | jq . | tee launch-template-x64.json
   exit 0
 fi
 
-launch_template_id=$(jq -r '.LaunchTemplateVersion.LaunchTemplateId' launch-template.json)
-source_version=$(jq -r '.LaunchTemplateVersion.VersionNumber' launch-template.json)
+launch_template_id=$(jq -r '.LaunchTemplateVersion.LaunchTemplateId' launch-template-x64.json)
+source_version=$(jq -r '.LaunchTemplateVersion.VersionNumber' launch-template-x64.json)
 
 output=$(aws ec2 create-launch-template-version --launch-template-id $launch_template_id  --source-version $source_version \
---launch-template-data file://config.json)
-echo $output | jq . | tee launch-template.json
+--launch-template-data file://config-x64.json)
+echo $output | jq . | tee launch-template-x64.json
+
+echo "creating ARM template:"
+result=$(jq -r ".LaunchTemplate" launch-template-arm.json)
+
+# Check if the result is null (key doesn't exist) or not (key exists)
+if [ "$result" != "null" ]; then
+  launch_template_id=$(jq -r '.LaunchTemplate.LaunchTemplateId' launch-template-arm.json)
+  source_version=$(jq -r '.LaunchTemplate.LatestVersionNumber' launch-template-arm.json)
+
+  output=$(aws ec2 create-launch-template-version --launch-template-id $launch_template_id  --source-version $source_version \
+  --launch-template-data file://config-arm.json)
+  echo $output | jq . | tee launch-template-arm.json
+  exit 0
+fi
+
+launch_template_id=$(jq -r '.LaunchTemplateVersion.LaunchTemplateId' launch-template-arm.json)
+source_version=$(jq -r '.LaunchTemplateVersion.VersionNumber' launch-template-arm.json)
+
+output=$(aws ec2 create-launch-template-version --launch-template-id $launch_template_id  --source-version $source_version \
+--launch-template-data file://config-arm.json)
+echo $output | jq . | tee launch-template-arm.json

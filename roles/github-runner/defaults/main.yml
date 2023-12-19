@@ -1,2 +1,2 @@
 ---
-runner_name: github-runner
+runner_name: "github-runner-{{ ansible_architecture }}"

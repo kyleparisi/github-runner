@@ -2,5 +2,8 @@
 
 set -e
 
-output=$(aws ec2 create-launch-template --launch-template-name github-runner --launch-template-data file://config.json)
-echo $output | jq . | tee launch-template.json
+output=$(aws ec2 create-launch-template --launch-template-name github-runner-x64 --launch-template-data file://config-x64.json)
+echo $output | jq . | tee launch-template-x64.json
+
+output=$(aws ec2 create-launch-template --launch-template-name github-runner-arm --launch-template-data file://config-arm.json)
+echo $output | jq . | tee launch-template-arm.json
